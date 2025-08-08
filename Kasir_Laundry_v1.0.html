@@ -1,0 +1,927 @@
+<!DOCTYPE html><html lang="id"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kasir Laundry</title>
+  <style>
+    :root{
+      --bg:#eef2f7;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --brand:#2563eb;
+      --brand-strong:#1d4ed8;
+      --accent:#10b981;
+      --danger:#ef4444;
+      --warning:#f59e0b;
+      --slate:#607d8b;
+      --border:#e5e7eb;
+      --shadow:0 8px 24px rgba(16,24,40,.08);
+    }
+    *{box-sizing:border-box}
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      max-width: 520px;
+      margin: 0 auto;
+      background: linear-gradient(180deg,#f7fafc, #eef2f7);
+      color: var(--text);
+      padding: 0 0 48px 0;
+    }
+    .container {
+      background: var(--card);
+      margin: 18px 12px 0 12px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 20px 16px 24px 16px;
+      border: 1px solid var(--border);
+    }
+    h2, h3 {
+      text-align: center;
+      margin: 0 0 18px 0;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: .3px;
+    }
+    h2 { font-size: 20px; }
+    h3 { font-size: 16px; color:#111827; }
+    label {
+      display: block;
+      margin: 14px 0 6px 2px;
+      font-size: 14px;
+      font-weight: 600;
+      color:#374151;
+    }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 6px;
+      font-size: 15px;
+      transition: all .2s ease;
+      background:#fff;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 4px rgba(37,99,235,.08);
+      outline: none;
+    }
+    .row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .row > * { flex: 1; }
+    .total {
+      margin: 18px 0 10px 0;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--accent);
+      text-align: right;
+    }
+    button {
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 8px;
+      margin-bottom: 6px;
+      transition: background .15s ease, transform .06s ease, opacity .2s ease;
+    }
+    button:active { background: var(--brand-strong); transform: translateY(1px); }
+    button:disabled { opacity:.55; cursor:not-allowed; }
+    .btn-secondary { background:#111827; }
+    .clear { background: var(--danger); }
+    .back-btn { background: var(--slate); margin-top: 8px;}
+    .btn-warning { background: var(--warning); }
+    .btn-green { background: var(--accent); }
+    .qris-code {
+      margin-top: 18px;
+      text-align: center;
+      display: none;
+    }
+    .qris-code img {
+      border-radius: 10px;
+      width: 180px;
+      max-width: 90%;
+      margin: 0 auto 8px auto;
+      display: block;
+      box-shadow: var(--shadow);
+      border:1px solid var(--border);
+      background:#fff;
+    }
+    table {
+      width: 100%;
+      margin-top: 14px;
+      border-collapse: collapse;
+      font-size: 14px;
+      border:1px solid var(--border);
+      overflow: hidden;
+      border-radius: 10px;
+    }
+    th, td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: left;
+      background: #fff;
+    }
+    th {
+      background: #eff6ff;
+      font-weight: 800;
+      color: var(--brand);
+    }
+    tr:last-child td { border-bottom:none; }
+    .btn-hapus {
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 12px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-hapus:active { opacity:.92; transform: translateY(1px); }
+    .hidden { display: none; }
+    .pelanggan-group { position: relative; }
+    .pelanggan-group select {
+      margin-top: 4px;
+      margin-bottom: 4px;
+      width: 100%;
+      font-size: 15px;
+      border-radius: 10px;
+    }
+    #btnHapusPelanggan, #btnHapusKaryawan {
+      margin-top: 6px;
+      display: none;
+      font-size: 14px;
+      padding: 10px 0;
+      border-radius: 10px;
+    }
+    #btnHapusPelanggan { background: var(--danger); }
+    #btnHapusKaryawan { background:#e67e22; color:#fff; }
+    #splashScreen{
+      position:fixed; inset:0; display:flex; justify-content:center; align-items:center; background: radial-gradient(1000px 480px at 50% -10%, #60a5fa 0%, #2563eb 40%, #1d4ed8 100%); color:white; flex-direction:column; z-index:9999;
+    }
+    #splashScreen h1 { font-size:28px; letter-spacing:.5px; margin:0; }
+    #splashScreen p { margin-top:10px; opacity:.9; }
+    .toolbar {
+      display:flex; flex-direction:column; gap:10px; margin-top: 14px;
+    }
+    .pill {
+      background:#f8fafc; border:1px solid var(--border); padding:10px 12px; border-radius: 10px; color:#374151; font-size:14px;
+    }
+    .hint {
+      font-size:12.5px; color:#6b7280; margin: 6px 2px 10px 2px;
+    }
+    @media (max-width: 600px) {
+      .container { margin: 0; border-radius: 0; padding: 16px 10px 22px 10px; }
+      .qris-code img { width: 140px; }
+      table th, table td { padding: 8px 6px; }
+      .total { font-size: 17px; }
+      #btnHapusPelanggan, #btnHapusKaryawan { font-size:13px; }
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+  <!-- Splash: tampil dulu, halaman utama disembunyikan -->
+  <div id="splashScreen">
+    <h1 id="splashNamaLaundry">Laundry</h1>
+    <p>Memuat aplikasi...</p>
+  </div>
+
+  <div class="container hidden" id="mainKasir">
+    <h2 id="judulLaundry">ARISTA LAUNDRY</h2>
+
+    <div class="pelanggan-group">
+      <label>Pilih Nama Pelanggan:</label>
+      <select id="daftarPelanggan" onchange="isiPelanggan()">
+        <option value="">-- Pelanggan Baru --</option>
+      </select>
+      <button id="btnHapusPelanggan" type="button" onclick="hapusPelanggan()">Hapus Pelanggan Ini</button>
+    </div>
+
+    <label>Nama Pelanggan:</label>
+    <input type="text" id="namaPelanggan" autocomplete="off" placeholder="Contoh: Budi">
+
+    <div class="pelanggan-group">
+      <label>Pilih Nama Karyawan:</label>
+      <select id="daftarKaryawan" onchange="isiKaryawan()">
+        <option value="">-- Karyawan Baru --</option>
+      </select>
+      <button id="btnHapusKaryawan" type="button" onclick="hapusKaryawan()">Hapus Karyawan Ini</button>
+
+      <label>Nama Karyawan:</label>
+      <input type="text" id="namaKaryawan" autocomplete="off" placeholder="Contoh: Rina">
+    </div>
+
+    <label>No WA Pelanggan:</label>
+    <input type="tel" id="waPelanggan" autocomplete="off" pattern="^08\\d{8,12}$" placeholder="Contoh: 0812xxxxxxxx">
+
+    <label>Jenis Layanan:</label>
+    <select id="jenisLayanan" onchange="hitungTotal()">
+      <option value="8000">Cuci Kering - Rp8.000/kg</option>
+      <option value="10000">Cuci Setrika - Rp10.000/kg</option>
+      <option value="12000">Setrika Saja - Rp12.000/kg</option>
+      <option value="15000">Express (1 Hari) - Rp15.000/kg</option>
+    </select>
+
+    <label>Berat Cucian (kg):</label>
+    <input type="number" id="berat" min="1" oninput="hitungTotal()" placeholder="Masukkan berat">
+
+    <div class="row">
+      <div>
+        <label>Tanggal Masuk:</label>
+        <input type="date" id="tglMasuk">
+      </div>
+      <div>
+        <label>Tanggal Selesai:</label>
+        <input type="date" id="tglSelesai">
+      </div>
+    </div>
+
+    <label>Layanan Tambahan (Opsional):</label>
+    <select id="layananTambahan" onchange="hitungTotal()">
+      <option value="0">Tidak Ada</option>
+      <option value="5000">Bed Cover - Rp5.000</option>
+      <option value="7000">Jas - Rp7.000</option>
+      <option value="4000">Selimut - Rp4.000</option>
+    </select>
+
+    <div class="total" id="totalHarga">Total: Rp0</div>
+
+    <button onclick="cetakStruk()">Cetak Struk</button>
+    <button class="btn-secondary" onclick="kirimStrukWA()">Kirim Struk via WA</button>
+
+    <h3>Riwayat Transaksi</h3>
+    <div style="overflow-x:auto;">
+      <div style="margin: 8px 0 10px 0;">
+        <input id="searchInput" class="pill" type="text" placeholder="Cari transaksi (nama, karyawan, WA, layanan)" oninput="filterTransaksi()">
+      </div>
+
+      <table id="tabelTransaksi">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama</th>
+            <th>Karyawan</th>
+            <th>WA</th>
+            <th>Layanan</th>
+            <th>Berat</th>
+            <th>Total</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="toolbar">
+        <button class="btn-green" onclick="tampilkanRingkasanLaporan()">Lihat Laporan Harian/Bulanan</button>
+        <button class="back-btn" onclick="window.print()">Cetak Halaman</button>
+        <button class="btn-warning" onclick="exportTransaksiPDF()">Export Transaksi ke PDF</button>
+        <button onclick="exportTransaksiJSON()">Backup Transaksi (JSON)</button>
+        <input type="file" id="importJSONInput" accept=".json" style="margin-top:6px;" onchange="importTransaksiJSON()">
+      </div>
+    </div>
+
+    <button class="clear" onclick="clearTransaksi()">Hapus Semua Riwayat</button>
+
+    <div class="qris-code" id="qrisContainer">
+      <h3>QRIS Pembayaran</h3>
+      <img id="qrisImage" alt="QRIS" src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect width='100%25' height='100%25' fill='white'/%3E%3Crect x='20' y='20' width='260' height='260' fill='%23f3f4f6' stroke='%23d1d5db'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Segoe UI, Arial' font-size='18' fill='%236b7280'%3EQRIS%20Payment%3C/text%3E%3C/svg%3E">
+      <p>Scan QR code untuk melakukan pembayaran.</p>
+    </div>
+
+    <button onclick="toggleSettings()">Pengaturan Harga &amp; QRIS</button>
+  </div>
+
+  <div class="container hidden" id="settings">
+    <h3>Pengaturan Harga &amp; QRIS</h3>
+
+    <label>Kode Aktivasi Premium:</label>
+    <input type="text" id="kodeAktivasiInput" placeholder="Masukkan 10 digit kode">
+    <button style="margin-top:10px;" onclick="aktivasiPremium()">Aktifkan Premium</button>
+    <p id="statusPremium" style="margin-top:6px; font-weight:bold; color:#21a431;"></p>
+
+    <label>Nama Laundry:</label>
+    <input type="text" id="namaLaundryInput" placeholder="Contoh: Arista Laundry" disabled="">
+    <button id="btnSimpanNamaLaundry" style="margin-top:8px;background:#2563eb;color:#fff;" onclick="updateNamaLaundry()" disabled="">Simpan Nama Laundry</button>
+    <div class="hint">Terkunci hingga Premium diaktifkan.</div>
+
+    <div class="row">
+      <div>
+        <label>Cuci Kering (Rp):</label>
+        <input type="number" id="hargaCuciKering" value="8000">
+      </div>
+      <div>
+        <label>Cuci Setrika (Rp):</label>
+        <input type="number" id="hargaCuciSetrika" value="10000">
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Setrika Saja (Rp):</label>
+        <input type="number" id="hargaSetrikaSaja" value="12000">
+      </div>
+      <div>
+        <label>Express 1 Hari (Rp):</label>
+        <input type="number" id="hargaExpress" value="15000">
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>Bed Cover (Rp):</label>
+        <input type="number" id="hargaBedCover" value="5000">
+      </div>
+      <div>
+        <label>Jas (Rp):</label>
+        <input type="number" id="hargaJas" value="7000">
+      </div>
+      <div>
+        <label>Selimut (Rp):</label>
+        <input type="number" id="hargaSelimut" value="4000">
+      </div>
+    </div>
+
+    <label>Upload QRIS Gambar:</label>
+    <input type="file" id="qrisUploadSettings" accept="image/*" onchange="uploadQRISSettings()" disabled="">
+    <div class="hint">Terkunci hingga Premium diaktifkan.</div>
+
+    <button class="btn-green" onclick="simpanHarga()">Simpan Pengaturan Harga</button>
+    <button class="back-btn" onclick="toggleSettings()">Kembali</button>
+  </div>
+
+  <script>
+    // ---------- Util Pelanggan ----------
+    function getPelangganList() {
+      return JSON.parse(localStorage.getItem("pelangganList")) || [];
+    }
+    function savePelangganList(list) {
+      localStorage.setItem("pelangganList", JSON.stringify(list));
+    }
+    function updateDropdownPelanggan() {
+      const select = document.getElementById("daftarPelanggan");
+      const list = getPelangganList();
+      let options = '<option value="">-- Pelanggan Baru --</option>';
+      list.forEach((p, i) => {
+        options += `<option value="${i}">${p.nama} (${p.wa})</option>`;
+      });
+      select.innerHTML = options;
+      document.getElementById("btnHapusPelanggan").style.display = "none";
+    }
+    function isiPelanggan() {
+      const idx = document.getElementById("daftarPelanggan").value;
+      const list = getPelangganList();
+      if (idx !== "" && list[idx]) {
+        document.getElementById("namaPelanggan").value = list[idx].nama;
+        document.getElementById("waPelanggan").value = list[idx].wa;
+        document.getElementById("btnHapusPelanggan").style.display = "block";
+      } else {
+        document.getElementById("namaPelanggan").value = "";
+        document.getElementById("waPelanggan").value = "";
+        document.getElementById("btnHapusPelanggan").style.display = "none";
+      }
+    }
+    function hapusPelanggan() {
+      const idx = document.getElementById("daftarPelanggan").value;
+      if (idx === "") { alert("Pilih pelanggan yang ingin dihapus!"); return; }
+      if (!confirm("Yakin ingin hapus pelanggan ini?")) return;
+      let list = getPelangganList();
+      list.splice(idx, 1);
+      savePelangganList(list);
+      updateDropdownPelanggan();
+      document.getElementById("daftarPelanggan").value = "";
+      document.getElementById("namaPelanggan").value = "";
+      document.getElementById("waPelanggan").value = "";
+      document.getElementById("btnHapusPelanggan").style.display = "none";
+    }
+
+    // ---------- Util Karyawan ----------
+    function getKaryawanList() {
+      return JSON.parse(localStorage.getItem("karyawanList")) || [];
+    }
+    function saveKaryawanList(list) {
+      localStorage.setItem("karyawanList", JSON.stringify(list));
+    }
+    function updateDropdownKaryawan() {
+      const select = document.getElementById("daftarKaryawan");
+      const list = getKaryawanList();
+      let options = '<option value="">-- Karyawan Baru --</option>';
+      list.forEach((p, i) => { options += `<option value="${i}">${p}</option>`; });
+      select.innerHTML = options;
+      document.getElementById("btnHapusKaryawan").style.display = "none";
+    }
+    function isiKaryawan() {
+      const idx = document.getElementById("daftarKaryawan").value;
+      const list = getKaryawanList();
+      if (idx !== "" && list[idx]) {
+        document.getElementById("namaKaryawan").value = list[idx];
+        document.getElementById("btnHapusKaryawan").style.display = "block";
+      } else {
+        document.getElementById("namaKaryawan").value = "";
+        document.getElementById("btnHapusKaryawan").style.display = "none";
+      }
+    }
+    function hapusKaryawan() {
+      const idx = document.getElementById("daftarKaryawan").value;
+      if (idx === "") { alert("Pilih karyawan yang ingin dihapus!"); return; }
+      if (!confirm("Yakin ingin hapus karyawan ini?")) return;
+      let list = getKaryawanList();
+      list.splice(idx, 1);
+      saveKaryawanList(list);
+      updateDropdownKaryawan();
+      document.getElementById("daftarKaryawan").value = "";
+      document.getElementById("namaKaryawan").value = "";
+      document.getElementById("btnHapusKaryawan").style.display = "none";
+    }
+
+    // ---------- Hitung Total ----------
+    function hitungTotal() {
+      const hargaPerKg = parseInt(document.getElementById("jenisLayanan").value);
+      const berat = parseFloat(document.getElementById("berat").value) || 0;
+      const layananTambahan = parseInt(document.getElementById("layananTambahan").value);
+
+      const hargaBedCover = parseInt(localStorage.getItem("hargaBedCover")) || 5000;
+      const hargaJas = parseInt(localStorage.getItem("hargaJas")) || 7000;
+      const hargaSelimut = parseInt(localStorage.getItem("hargaSelimut")) || 4000;
+
+      let total = hargaPerKg * berat;
+      if (layananTambahan === hargaBedCover) total += hargaBedCover;
+      else if (layananTambahan === hargaJas) total += hargaJas;
+      else if (layananTambahan === hargaSelimut) total += hargaSelimut;
+
+      document.getElementById("totalHarga").textContent = "Total: Rp" + total.toLocaleString("id-ID");
+      return total;
+    }
+
+    // ---------- Cetak & Kirim Struk ----------
+    function ambilTanggalTransaksi() {
+      return {
+        tglMasuk: document.getElementById("tglMasuk").value,
+        tglSelesai: document.getElementById("tglSelesai").value
+      };
+    }
+
+    function cetakStruk() {
+      const nama = document.getElementById("namaPelanggan").value.trim();
+      const karyawan = document.getElementById("namaKaryawan").value.trim();
+      const wa = document.getElementById("waPelanggan").value.trim();
+      const jenis = document.getElementById("jenisLayanan");
+      const layanan = jenis.options[jenis.selectedIndex].text;
+      const berat = parseFloat(document.getElementById("berat").value) || 0;
+      const hargaPerKg = parseInt(jenis.value);
+      const layananTambahan = parseInt(document.getElementById("layananTambahan").value);
+
+      const hargaBedCover = parseInt(localStorage.getItem("hargaBedCover")) || 5000;
+      const hargaJas = parseInt(localStorage.getItem("hargaJas")) || 7000;
+      const hargaSelimut = parseInt(localStorage.getItem("hargaSelimut")) || 4000;
+
+      let total = hargaPerKg * berat;
+      let namaTambahan = "Tidak Ada";
+      if (layananTambahan === hargaBedCover) { total += hargaBedCover; namaTambahan = "Bed Cover"; }
+      else if (layananTambahan === hargaJas) { total += hargaJas; namaTambahan = "Jas"; }
+      else if (layananTambahan === hargaSelimut) { total += hargaSelimut; namaTambahan = "Selimut"; }
+
+      if (!nama) { alert("Nama pelanggan wajib diisi!"); return; }
+      if (!karyawan) { alert("Nama karyawan wajib diisi!"); return; }
+      if (!wa.match(/^08\d{8,12}$/)) { alert("Nomor WA tidak valid. Contoh: 0812xxxxxxxx"); return; }
+      if (berat <= 0) { alert("Masukkan berat cucian yang benar!"); return; }
+
+      // Simpan pelanggan baru bila belum ada
+      let pl = getPelangganList();
+      if (!pl.some(p => p.nama === nama && p.wa === wa)) {
+        pl.push({ nama, wa });
+        savePelangganList(pl);
+        updateDropdownPelanggan();
+      }
+      // Simpan karyawan baru bila belum ada
+      let kl = getKaryawanList();
+      if (karyawan && !kl.includes(karyawan)) {
+        kl.push(karyawan);
+        saveKaryawanList(kl);
+        updateDropdownKaryawan();
+      }
+
+      // Simpan transaksi
+      const tanggal = ambilTanggalTransaksi();
+      const transaksiList = JSON.parse(localStorage.getItem("transaksi")) || [];
+      transaksiList.push({
+        nama, karyawan, wa, layanan, berat, total,
+        layananTambahan: namaTambahan,
+        tglMasuk: tanggal.tglMasuk || null,
+        tglSelesai: tanggal.tglSelesai || null
+      });
+      localStorage.setItem("transaksi", JSON.stringify(transaksiList));
+      tampilkanTransaksi();
+
+      // Tampilkan QRIS
+      document.getElementById("qrisContainer").style.display = 'block';
+
+      // Cetak struk
+      const strukHTML = `
+      <!DOCTYPE html>
+      <html lang="id">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Struk Laundry</title>
+        <style>
+          body { font-family: 'Segoe UI', Arial, sans-serif; background:#f3f5fa; margin:0; padding:0; }
+          .struk-container {
+            background: #fff; border-radius: 16px; box-shadow: 0 10px 24px rgba(16,24,40,.12);
+            padding: 24px 16px; max-width: 380px; margin: 36px auto; border:1px solid #e5e7eb;
+          }
+          h2 { text-align:center; color:#2563eb; letter-spacing:.3px; font-size: 18px; margin-bottom: 10px; font-weight: 800; }
+          .struk-row { display:flex; justify-content:space-between; margin:6px 0; font-size: 14.5px; }
+          .struk-label { color:#374151; font-weight:600; }
+          .struk-value { text-align:right; color:#111827; font-weight:700; }
+          .total { font-size: 16.5px; font-weight: 800; color: #10b981; margin: 16px 0 0 0; text-align: center; letter-spacing: .3px; }
+          .thanks { margin-top: 16px; font-size: 13.5px; text-align: center; color: #6b7280; }
+          button { display:block; width:100%; margin: 18px 0 0 0; padding: 12px 0; font-size: 15px; background:#2563eb; color:white; border:none; border-radius:10px; cursor:pointer; font-weight:700; }
+          @media (max-width: 500px) { .struk-container{ margin: 8vw 2vw; max-width: 94vw; padding: 18px 5vw; } }
+        </style>
+      </head>
+      <body>
+        <div class="struk-container">
+          <h2>${localStorage.getItem("namaLaundry") || "Laundry"}</h2>
+          <div class="struk-row"><span class="struk-label">Nama</span><span class="struk-value">${nama}</span></div>
+          <div class="struk-row"><span class="struk-label">Karyawan</span><span class="struk-value">${karyawan}</span></div>
+          <div class="struk-row"><span class="struk-label">No WA</span><span class="struk-value">${wa}</span></div>
+          <div class="struk-row"><span class="struk-label">Layanan</span><span class="struk-value">${layanan}</span></div>
+          <div class="struk-row"><span class="struk-label">Berat</span><span class="struk-value">${berat} kg</span></div>
+          <div class="struk-row"><span class="struk-label">Harga/kg</span><span class="struk-value">Rp${hargaPerKg.toLocaleString("id-ID")}</span></div>
+          <div class="struk-row"><span class="struk-label">Layanan Tambahan</span><span class="struk-value">${namaTambahan}</span></div>
+          <div class="struk-row"><span class="struk-label">Masuk</span><span class="struk-value">${tanggal.tglMasuk || '-'}</span></div>
+          <div class="struk-row"><span class="struk-label">Selesai</span><span class="struk-value">${tanggal.tglSelesai || '-'}</span></div>
+          <hr style="border:none;border-top:1.5px dashed #e5e7eb;margin:14px 0 10px 0;">
+          <div class="total">Total Bayar: Rp${total.toLocaleString("id-ID")}</div>
+          <div class="thanks">Terima kasih telah menggunakan layanan kami!</div>
+          <button onclick="window.print()">Cetak Struk</button>
+        </div>
+      </body>
+      </html>`;
+      const win = window.open("", "", "width=390,height=620");
+      win.document.write(strukHTML);
+      win.document.close();
+    }
+
+    function kirimStrukWA() {
+      const nama = document.getElementById("namaPelanggan").value.trim();
+      const karyawan = document.getElementById("namaKaryawan").value.trim();
+      const wa = document.getElementById("waPelanggan").value.trim();
+      const jenis = document.getElementById("jenisLayanan");
+      const layanan = jenis.options[jenis.selectedIndex].text;
+      const berat = parseFloat(document.getElementById("berat").value) || 0;
+      const hargaPerKg = parseInt(jenis.value);
+      const layananTambahan = parseInt(document.getElementById("layananTambahan").value);
+
+      const hargaBedCover = parseInt(localStorage.getItem("hargaBedCover")) || 5000;
+      const hargaJas = parseInt(localStorage.getItem("hargaJas")) || 7000;
+      const hargaSelimut = parseInt(localStorage.getItem("hargaSelimut")) || 4000;
+
+      let total = hargaPerKg * berat;
+      let namaTambahan = "Tidak Ada";
+      if (layananTambahan === hargaBedCover) { total += hargaBedCover; namaTambahan = "Bed Cover"; }
+      else if (layananTambahan === hargaJas) { total += hargaJas; namaTambahan = "Jas"; }
+      else if (layananTambahan === hargaSelimut) { total += hargaSelimut; namaTambahan = "Selimut"; }
+
+      if (!nama) { alert("Nama pelanggan wajib diisi!"); return; }
+      if (!karyawan) { alert("Nama karyawan wajib diisi!"); return; }
+      if (!wa.match(/^08\d{8,12}$/)) { alert("Nomor WA tidak valid. Contoh: 0812xxxxxxxx"); return; }
+      if (berat <= 0) { alert("Masukkan berat cucian yang benar!"); return; }
+
+      const tanggal = ambilTanggalTransaksi();
+      let pesan = `Halo ${nama},%0A%0A*Struk ${localStorage.getItem('namaLaundry') || 'Laundry'}:*%0A----------------------------%0A`;
+      pesan += `Nama: *${nama}*%0A`;
+      pesan += `Karyawan: *${karyawan}*%0A`;
+      pesan += `No WA: *${wa}*%0A`;
+      pesan += `Layanan: *${layanan}*%0A`;
+      pesan += `Berat: *${berat} kg*%0A`;
+      pesan += `Tanggal Masuk: *${tanggal.tglMasuk || '-'}*%0A`;
+      pesan += `Tanggal Selesai: *${tanggal.tglSelesai || '-'}*%0A`;
+      pesan += `Harga/kg: *Rp${hargaPerKg.toLocaleString("id-ID")}*%0A`;
+      pesan += `Layanan Tambahan: *${namaTambahan}*%0A`;
+      pesan += `----------------------------%0A`;
+      pesan += `*Total Bayar: Rp${total.toLocaleString("id-ID")}*%0A%0A`;
+      pesan += `Terima kasih telah menggunakan layanan ${localStorage.getItem('namaLaundry') || 'Laundry'}!`;
+
+      const waKirim = wa.replace(/^0/, "62");
+      const url = `https://wa.me/${waKirim}?text=${pesan}`;
+      window.open(url, "_blank");
+    }
+
+    // ---------- Transaksi Tabel ----------
+    function tampilkanTransaksi() {
+      const transaksiList = JSON.parse(localStorage.getItem("transaksi")) || [];
+      const tbody = document.querySelector("#tabelTransaksi tbody");
+      tbody.innerHTML = "";
+      if (transaksiList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#9ca3af;">Belum ada transaksi.</td></tr>';
+        return;
+      }
+      transaksiList.forEach((t, i) => {
+        const row = tbody.insertRow();
+        row.insertCell(0).textContent = i + 1;
+        row.insertCell(1).textContent = t.nama;
+        row.insertCell(2).textContent = t.karyawan || "-";
+        row.insertCell(3).textContent = t.wa;
+        row.insertCell(4).textContent = t.layanan;
+        row.insertCell(5).textContent = (t.berat || 0) + " kg";
+        row.insertCell(6).textContent = "Rp" + (t.total || 0).toLocaleString("id-ID");
+        const ctd = row.insertCell(7);
+        const btn = document.createElement("button");
+        btn.className = "btn-hapus";
+        btn.textContent = "Hapus";
+        btn.onclick = () => hapusTransaksi(i);
+        ctd.appendChild(btn);
+      });
+    }
+    function hapusTransaksi(index) {
+      let transaksiList = JSON.parse(localStorage.getItem("transaksi")) || [];
+      if (!confirm("Hapus transaksi ini?")) return;
+      transaksiList.splice(index, 1);
+      localStorage.setItem("transaksi", JSON.stringify(transaksiList));
+      tampilkanTransaksi();
+    }
+    function clearTransaksi() {
+      if (!confirm("Hapus semua riwayat transaksi?")) return;
+      localStorage.removeItem("transaksi");
+      tampilkanTransaksi();
+    }
+
+    // ---------- Filter ----------
+    function filterTransaksi() {
+      const keyword = document.getElementById("searchInput").value.toLowerCase();
+      const trs = document.querySelectorAll("#tabelTransaksi tbody tr");
+      trs.forEach(tr => {
+        const text = tr.textContent.toLowerCase();
+        tr.style.display = text.includes(keyword) ? "" : "none";
+      });
+    }
+
+    // ---------- Laporan ----------
+    function tampilkanRingkasanLaporan() {
+      const data = JSON.parse(localStorage.getItem("transaksi")) || [];
+      if (data.length === 0) return alert("Belum ada transaksi untuk dilaporkan.");
+
+      // Rekap bulanan: YYYY-MM
+      const rekap = {};
+      data.forEach(t => {
+        const tanggal = t.tglMasuk || t.tglSelesai || null;
+        let key = "Tanpa Tanggal";
+        if (tanggal) {
+          const d = new Date(tanggal);
+          if (!isNaN(d.getTime())) {
+            const mm = String(d.getMonth() + 1).padStart(2, "0");
+            key = `${d.getFullYear()}-${mm}`;
+          }
+        }
+        if (!rekap[key]) rekap[key] = { total: 0, berat: 0, jumlah: 0 };
+        rekap[key].total += Number(t.total) || 0;
+        rekap[key].berat += Number(t.berat) || 0;
+        rekap[key].jumlah += 1;
+      });
+
+      let hasil = "📊 Ringkasan Laporan Bulanan:\n\n";
+      Object.keys(rekap).sort().forEach(k => {
+        hasil += `• ${k}: ${rekap[k].jumlah} transaksi, Rp${rekap[k].total.toLocaleString("id-ID")}, ${rekap[k].berat} kg\n`;
+      });
+      alert(hasil);
+    }
+
+    // ---------- Export/Import ----------
+    async function exportTransaksiPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const transaksi = JSON.parse(localStorage.getItem("transaksi")) || [];
+      if (transaksi.length === 0) return alert("Tidak ada transaksi.");
+
+      doc.setFontSize(14);
+      doc.text(`Laporan Transaksi ${localStorage.getItem("namaLaundry") || "Laundry"}`, 14, 16);
+      const headers = ["No", "Nama", "Karyawan", "WA", "Layanan", "Berat", "Total"];
+      let rows = transaksi.map((t, i) => [
+        i + 1,
+        t.nama,
+        t.karyawan || "-",
+        t.wa,
+        t.layanan,
+        (t.berat || 0) + " kg",
+        "Rp" + (t.total || 0).toLocaleString("id-ID")
+      ]);
+
+      doc.autoTable({
+        head: [headers],
+        body: rows,
+        startY: 22,
+        styles: { fontSize: 10 }
+      });
+
+      doc.save("laporan-transaksi.pdf");
+    }
+    function exportTransaksiJSON() {
+      const data = localStorage.getItem("transaksi");
+      if (!data) return alert("Tidak ada data transaksi.");
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "backup-transaksi.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    function importTransaksiJSON() {
+      const fileInput = document.getElementById("importJSONInput");
+      const file = fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const json = JSON.parse(e.target.result);
+          if (Array.isArray(json)) {
+            localStorage.setItem("transaksi", JSON.stringify(json));
+            alert("Data transaksi berhasil diimpor!");
+            tampilkanTransaksi();
+          } else {
+            alert("Format file tidak valid.");
+          }
+        } catch (err) {
+          alert("Gagal membaca file JSON.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // ---------- Pengaturan & Premium ----------
+    function setPremiumUIState() {
+      const isActive = localStorage.getItem("premiumStatus") === "AKTIF";
+      const namaInput = document.getElementById("namaLaundryInput");
+      const simpanBtn = document.getElementById("btnSimpanNamaLaundry");
+      const qrisInput = document.getElementById("qrisUploadSettings");
+      const statusEl = document.getElementById("statusPremium");
+
+      if (namaInput) namaInput.disabled = !isActive;
+      if (simpanBtn) simpanBtn.disabled = !isActive;
+      if (qrisInput) qrisInput.disabled = !isActive;
+
+      if (statusEl) {
+        statusEl.style.color = isActive ? "#21a431" : "#ef4444";
+        statusEl.textContent = isActive ? "PREMIUM AKTIF ✅" : "PREMIUM TIDAK AKTIF";
+      }
+    }
+
+    function uploadQRISSettings() {
+      // Lindungi jika ada manipulasi DOM manual
+      if (localStorage.getItem("premiumStatus") !== "AKTIF") {
+        alert("Fitur upload QRIS hanya untuk pengguna PREMIUM.");
+        setPremiumUIState();
+        return;
+      }
+      const file = document.getElementById("qrisUploadSettings").files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById("qrisImage").src = e.target.result;
+        localStorage.setItem("qrisImg", e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function toggleSettings() {
+      document.getElementById("mainKasir").classList.toggle("hidden");
+      document.getElementById("settings").classList.toggle("hidden");
+      if (!document.getElementById("settings").classList.contains("hidden")) {
+        document.getElementById("hargaCuciKering").value = localStorage.getItem("hargaCuciKering") || 8000;
+        document.getElementById("hargaCuciSetrika").value = localStorage.getItem("hargaCuciSetrika") || 10000;
+        document.getElementById("hargaSetrikaSaja").value = localStorage.getItem("hargaSetrikaSaja") || 12000;
+        document.getElementById("hargaExpress").value = localStorage.getItem("hargaExpress") || 15000;
+        document.getElementById("hargaBedCover").value = localStorage.getItem("hargaBedCover") || 5000;
+        document.getElementById("hargaJas").value = localStorage.getItem("hargaJas") || 7000;
+        document.getElementById("hargaSelimut").value = localStorage.getItem("hargaSelimut") || 4000;
+        document.getElementById("namaLaundryInput").value = localStorage.getItem("namaLaundry") || "";
+        setPremiumUIState();
+      }
+    }
+
+    function simpanHarga() {
+      const hargaCuciKering = document.getElementById("hargaCuciKering").value;
+      const hargaCuciSetrika = document.getElementById("hargaCuciSetrika").value;
+      const hargaSetrikaSaja = document.getElementById("hargaSetrikaSaja").value;
+      const hargaExpress = document.getElementById("hargaExpress").value;
+      const hargaBedCover = document.getElementById("hargaBedCover").value;
+      const hargaJas = document.getElementById("hargaJas").value;
+      const hargaSelimut = document.getElementById("hargaSelimut").value;
+
+      localStorage.setItem("hargaCuciKering", hargaCuciKering);
+      localStorage.setItem("hargaCuciSetrika", hargaCuciSetrika);
+      localStorage.setItem("hargaSetrikaSaja", hargaSetrikaSaja);
+      localStorage.setItem("hargaExpress", hargaExpress);
+      localStorage.setItem("hargaBedCover", hargaBedCover);
+      localStorage.setItem("hargaJas", hargaJas);
+      localStorage.setItem("hargaSelimut", hargaSelimut);
+
+      const jl = document.getElementById("jenisLayanan").children;
+      jl[0].value = hargaCuciKering; jl[0].text = "Cuci Kering - Rp"+parseInt(hargaCuciKering).toLocaleString("id-ID")+"/kg";
+      jl[1].value = hargaCuciSetrika; jl[1].text = "Cuci Setrika - Rp"+parseInt(hargaCuciSetrika).toLocaleString("id-ID")+"/kg";
+      jl[2].value = hargaSetrikaSaja; jl[2].text = "Setrika Saja - Rp"+parseInt(hargaSetrikaSaja).toLocaleString("id-ID")+"/kg";
+      jl[3].value = hargaExpress; jl[3].text = "Express (1 Hari) - Rp"+parseInt(hargaExpress).toLocaleString("id-ID")+"/kg";
+
+      const lt = document.getElementById("layananTambahan").children;
+      lt[1].value = hargaBedCover; lt[1].text = "Bed Cover - Rp"+parseInt(hargaBedCover).toLocaleString("id-ID");
+      lt[2].value = hargaJas; lt[2].text = "Jas - Rp"+parseInt(hargaJas).toLocaleString("id-ID");
+      lt[3].value = hargaSelimut; lt[3].text = "Selimut - Rp"+parseInt(hargaSelimut).toLocaleString("id-ID");
+
+      alert("Pengaturan harga telah disimpan!");
+      hitungTotal();
+    }
+
+    function updateNamaLaundry() {
+      const status = localStorage.getItem("premiumStatus");
+      if (status !== "AKTIF") {
+        alert("Fitur ini hanya tersedia untuk pengguna PREMIUM.");
+        setPremiumUIState();
+        return;
+      }
+      const nama = document.getElementById("namaLaundryInput").value.trim();
+      if (nama) {
+        localStorage.setItem("namaLaundry", nama);
+        document.getElementById("judulLaundry").textContent = nama;
+        document.getElementById("splashNamaLaundry").textContent = nama;
+        alert("Nama laundry disimpan.");
+      }
+    }
+
+    const kodePremiumList = new Set([
+      "ABCD123456", "ZXCV098765", "PREMIUM001", "GOLD123456", "VIP0000001"
+    ]);
+    function aktivasiPremium() {
+      const input = document.getElementById("kodeAktivasiInput").value.trim().toUpperCase();
+      if (!input || input.length !== 10) {
+        alert("Kode tidak valid. Harus 10 karakter.");
+        return;
+      }
+      if (kodePremiumList.has(input)) {
+        localStorage.setItem("premiumStatus", "AKTIF");
+        setPremiumUIState();
+        alert("Premium berhasil diaktifkan.");
+      } else {
+        alert("Kode aktivasi salah atau tidak dikenal.");
+      }
+    }
+
+    // ---------- Inisialisasi ----------
+    window.addEventListener("DOMContentLoaded", () => {
+      // Jangan auto-aktifkan Premium. Biarkan sesuai localStorage.
+      const status = localStorage.getItem("premiumStatus") || "NONAKTIF";
+      if (status !== "AKTIF") localStorage.setItem("premiumStatus", "NONAKTIF");
+
+      const namaLaundry = localStorage.getItem("namaLaundry") || "ARISTA LAUNDRY";
+      document.getElementById("splashNamaLaundry").textContent = namaLaundry;
+      document.getElementById("judulLaundry").textContent = namaLaundry;
+
+      // Load harga dari localStorage
+      const hargaCuciKering = localStorage.getItem("hargaCuciKering") || 8000;
+      const hargaCuciSetrika = localStorage.getItem("hargaCuciSetrika") || 10000;
+      const hargaSetrikaSaja = localStorage.getItem("hargaSetrikaSaja") || 12000;
+      const hargaExpress = localStorage.getItem("hargaExpress") || 15000;
+      const hargaBedCover = localStorage.getItem("hargaBedCover") || 5000;
+      const hargaJas = localStorage.getItem("hargaJas") || 7000;
+      const hargaSelimut = localStorage.getItem("hargaSelimut") || 4000;
+
+      const jl = document.getElementById("jenisLayanan").children;
+      jl[0].value = hargaCuciKering; jl[0].text = "Cuci Kering - Rp"+parseInt(hargaCuciKering).toLocaleString("id-ID")+"/kg";
+      jl[1].value = hargaCuciSetrika; jl[1].text = "Cuci Setrika - Rp"+parseInt(hargaCuciSetrika).toLocaleString("id-ID")+"/kg";
+      jl[2].value = hargaSetrikaSaja; jl[2].text = "Setrika Saja - Rp"+parseInt(hargaSetrikaSaja).toLocaleString("id-ID")+"/kg";
+      jl[3].value = hargaExpress; jl[3].text = "Express (1 Hari) - Rp"+parseInt(hargaExpress).toLocaleString("id-ID")+"/kg";
+
+      const lt = document.getElementById("layananTambahan").children;
+      lt[1].value = hargaBedCover; lt[1].text = "Bed Cover - Rp"+parseInt(hargaBedCover).toLocaleString("id-ID");
+      lt[2].value = hargaJas; lt[2].text = "Jas - Rp"+parseInt(hargaJas).toLocaleString("id-ID");
+      lt[3].value = hargaSelimut; lt[3].text = "Selimut - Rp"+parseInt(hargaSelimut).toLocaleString("id-ID");
+
+      // Dropdowns & tabel
+      updateDropdownPelanggan();
+      updateDropdownKaryawan();
+      tampilkanTransaksi();
+      hitungTotal();
+
+      // QRIS image jika tersimpan
+      const qimg = localStorage.getItem("qrisImg");
+      if (qimg) document.getElementById("qrisImage").src = qimg;
+
+      // Set UI premium (kunci/unlock input nama laundry & upload QRIS)
+      setPremiumUIState();
+
+      // Tampilkan halaman utama setelah splash singkat
+      setTimeout(() => {
+        document.getElementById("splashScreen").style.display = "none";
+        document.getElementById("mainKasir").classList.remove("hidden");
+      }, 1200);
+    });
+  </script>
+
+
+
+</body></html>
