@@ -305,6 +305,8 @@
     </div>
 
     <div class="total" id="totalHarga">Total: Rp0</div>
+
+    <button onclick="cetakStruk()">Cetak Struk</button>
     <button class="btn-secondary" onclick="kirimStrukWA()">Kirim Struk via WA</button>
 
     <h3>Riwayat Transaksi</h3>
@@ -331,7 +333,11 @@
 
       <div class="toolbar">
         <button class="btn-green" onclick="tampilkanRingkasanLaporan()">Lihat Laporan Harian/Bulanan</button>
-        <button class="back-btn" onclick="window.print()">Cetak Halaman</button></div>
+        <button class="back-btn" onclick="window.print()">Cetak Halaman</button>
+        <button class="btn-warning" onclick="exportTransaksiPDF()">Export Transaksi ke PDF</button>
+        <button onclick="exportTransaksiJSON()">Backup Transaksi (JSON)</button>
+        <input type="file" id="importJSONInput" accept=".json" style="margin-top:6px;" onchange="importTransaksiJSON()">
+      </div>
     </div>
 
     <button class="clear" onclick="adminHapusSemuaTransaksi()">Hapus Semua Riwayat (Admin)</button>
@@ -731,6 +737,55 @@
       doc.save("struk-laundry.pdf");
     }
 
+    function cetakStruk() {
+      // Validasi input
+      const data = ambilDataStruk();
+      if (!data.nama) { alert("Nama pelanggan wajib diisi!"); return; }
+      if (!data.karyawan) { alert("Nama karyawan wajib diisi!"); return; }
+      if (!/^08\d{8,12}$/.test(data.wa)) { alert("Nomor WA tidak valid. Contoh: 0812xxxxxxxx"); return; }
+      if (data.berat <= 0) { alert("Masukkan berat cucian yang benar!"); return; }
+
+      // Simpan pelanggan & karyawan jika baru
+      let pl = getPelangganList();
+      if (!pl.some(p => p.nama === data.nama && p.wa === data.wa)) {
+        pl.push({ nama: data.nama, wa: data.wa });
+        savePelangganList(pl);
+        updateDropdownPelanggan();
+      }
+      let kl = getKaryawanList();
+      if (data.karyawan && !kl.includes(data.karyawan)) {
+        kl.push(data.karyawan);
+        saveKaryawanList(kl);
+        updateDropdownKaryawan();
+      }
+
+      // Simpan transaksi
+      const transaksiList = JSON.parse(localStorage.getItem("transaksi")) || [];
+      const layananTambahanText = data.addons.length ? data.addons.map(a => `${a.nama} x${a.qty}`).join(", ") : "Tidak Ada";
+      transaksiList.push({
+        nama: data.nama,
+        karyawan: data.karyawan,
+        wa: data.wa,
+        layanan: data.layanan,
+        berat: data.berat,
+        total: data.total,
+        layananTambahan: layananTambahanText,
+        tglMasuk: data.tanggal.tglMasuk || null,
+        tglSelesai: data.tanggal.tglSelesai || null
+      });
+      localStorage.setItem("transaksi", JSON.stringify(transaksiList));
+      tampilkanTransaksi();
+
+      // Tampilkan QRIS
+      document.getElementById("qrisContainer").style.display = 'block';
+
+      // Tampilkan overlay struk untuk print (lebih aman di WebView)
+      tampilkanStrukOverlay(data);
+
+      // Otomatis panggil dialog print (jika didukung)
+      try { setTimeout(() => window.print(), 50); } catch (e) {}
+    }
+
     function kirimStrukWA() {
       const data = ambilDataStruk();
       if (!data.nama) { alert("Nama pelanggan wajib diisi!"); return; }
@@ -872,7 +927,56 @@
     }
 
     // ---------- Export/Import ----------
-        function importTransaksiJSON() {
+    async function exportTransaksiPDF() {
+      const { jsPDF } = window.jspdf || {};
+      if (!jsPDF) { alert("jsPDF tidak tersedia. Pastikan koneksi internet aktif."); return; }
+      const doc = new jsPDF();
+      const transaksi = JSON.parse(localStorage.getItem("transaksi")) || [];
+      if (transaksi.length === 0) return alert("Tidak ada transaksi.");
+
+      const nl = localStorage.getItem("namaLaundry") || "Laundry";
+      const hp = localStorage.getItem("hpLaundry") || "";
+      const alamat = localStorage.getItem("alamatLaundry") || "";
+
+      doc.setFontSize(14);
+      doc.text(`Laporan Transaksi ${nl}`, 14, 16);
+      doc.setFontSize(10);
+      let y = 21;
+      if (hp) { doc.text(`HP: ${hp}`, 14, y); y += 5; }
+      if (alamat) { doc.text(`Alamat: ${alamat}`, 14, y); y += 6; }
+
+      const headers = ["No", "Nama", "Karyawan", "WA", "Layanan", "Berat", "Total"];
+      let rows = transaksi.map((t, i) => [
+        i + 1,
+        t.nama,
+        t.karyawan || "-",
+        t.wa,
+        t.layanan,
+        (t.berat || 0) + " kg",
+        toRp(t.total || 0)
+      ]);
+
+      doc.autoTable({
+        head: [headers],
+        body: rows,
+        startY: y + 4,
+        styles: { fontSize: 10 }
+      });
+
+      doc.save("laporan-transaksi.pdf");
+    }
+    function exportTransaksiJSON() {
+      const data = localStorage.getItem("transaksi");
+      if (!data) return alert("Tidak ada data transaksi.");
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "backup-transaksi.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+    function importTransaksiJSON() {
       const fileInput = document.getElementById("importJSONInput");
       const file = fileInput.files[0];
       if (!file) return;
